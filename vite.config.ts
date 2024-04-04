@@ -29,6 +29,9 @@ export default defineConfig({
                 index: "./index.html",
                 ...getMapsScripts(maps),
             },
+            external: [
+                "iframe.html",
+            ]
         },
     },
     plugins: [...getMapsOptimizers(maps, optimizerOptions)],
