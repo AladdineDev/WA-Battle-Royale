@@ -7,8 +7,6 @@ console.log("Script started successfully");
 
 let currentPopup: any = undefined;
 let timeCounter = 300; // 5 minutes
-let map: any = undefined;
-const mapConfig = { height: 0, width: 0 };
 const numberTileLimit = 3;
 let tic = 0;
 const numberOfParticipantsNeededToLaunchTheGame = 2;
@@ -18,10 +16,6 @@ WA.onInit()
 	.then(async () => {
 		console.log("Scripting API ready");
 		console.log("Player tags: ", WA.player.tags);
-		map = await WA.room.getTiledMap();
-		console.log(map);
-		mapConfig.height = map.height ?? 0;
-		mapConfig.width = map.width ?? 0;
 
 		initTimerGame(timeCounter);
 		//Initially, the player is not waiting to play
