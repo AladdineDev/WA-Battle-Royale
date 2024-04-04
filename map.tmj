@@ -511,6 +511,34 @@
                  "width":32,
                  "x":64,
                  "y":544
+                }, 
+                {
+                 "height":50.5344995140914,
+                 "id":20,
+                 "name":"bombe",
+                 "properties":[
+                        {
+                         "name":"zoom_margin",
+                         "type":"float",
+                         "value":1
+                        }],
+                 "rotation":0,
+                 "type":"area",
+                 "visible":true,
+                 "width":89.4071914480078,
+                 "x":641.399416909621,
+                 "y":245.869776482021
+                }, 
+                {
+                 "height":63.1681243926142,
+                 "id":21,
+                 "name":"champignon",
+                 "rotation":0,
+                 "type":"area",
+                 "visible":true,
+                 "width":101.068999028183,
+                 "x":171.039844509232,
+                 "y":278.91156462585
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -624,8 +652,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":66,
- "nextobjectid":21,
+ "nextlayerid":63,
+ "nextobjectid":26,
  "orientation":"orthogonal",
  "properties":[
         {
