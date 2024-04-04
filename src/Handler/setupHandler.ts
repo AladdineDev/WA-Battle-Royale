@@ -1,13 +1,16 @@
 import { Tile } from "../Entity/Tile";
+import Player from "../player";
 
 export class SetupHandler {
 	_instance: SetupHandler | null = null;
 	map: any = undefined;
+	mapMatrice: Tile[][] = [];
 	mapConfig = { height: 0, width: 0 };
 	timeCounter = 300; // 5 minutes
 	numberTileLimit = 3;
 	tic = 0;
 	numberOfParticipantsNeededToLaunchTheGame = 2;
+	hasAlreadyTakenDamage = false;
 
 	constructor() {
 		if (this._instance) {
@@ -20,6 +23,7 @@ export class SetupHandler {
 		this.map = await WA.room.getTiledMap();
 		this.mapConfig.height = this.map.height ?? 0;
 		this.mapConfig.width = this.map.width ?? 0;
+		this.loadingMap();
 		await WA.players.configureTracking();
 
 		this.initTimerGame(this.timeCounter);
@@ -51,10 +55,39 @@ export class SetupHandler {
 			console.log("Player left waiting room");
 		});
 
+		//Check every 3 seconds if the player is on a tile that should damage him
+		setInterval(async () => {
+			const position = await WA.player.getPosition();
+			let horizontalTile = Math.floor(position.x / 32);
+			let verticalTile = Math.floor(position.y / 32);
+			if (this.mapMatrice[verticalTile][horizontalTile].shouldDamagePlayer) {
+				if (!this.hasAlreadyTakenDamage) {
+					this.hasAlreadyTakenDamage = true;
+					Player.updateLifePoint(
+						WA.player,
+						(WA.player.state.lifePoint as number) - 1
+					);
+					setTimeout(() => {
+						this.hasAlreadyTakenDamage = false;
+					}, 3000);
+				}
+			}
+		}, 3000);
+
 		//test if it works
 		WA.players.onVariableChange("IsInWaitingRoom").subscribe((event) => {
 			console.log(`Player ${event.player.name} new status is ${event.value}`);
 		});
+	}
+
+	loadingMap() {
+		for (let i = 0; i < this.mapConfig.height; i++) {
+			const line: Tile[] = [];
+			for (let j = 0; j < this.mapConfig.width; j++) {
+				line.push(new Tile(j, i, "uglyblue", "items"));
+			}
+			this.mapMatrice.push(line);
+		}
 	}
 
 	initTimerGame(timeCounter: number) {
@@ -64,7 +97,7 @@ export class SetupHandler {
 				this.handleTileRemovedByTime();
 			}
 			this.numberTileLimit;
-		}, 10000); // 10 seconds
+		}, 3000); // 3 seconds
 	}
 
 	handleTileRemovedByTime() {
@@ -79,8 +112,8 @@ export class SetupHandler {
 					j == this.mapConfig.width - this.tic
 				) {
 					if (this.isNotInSafeZone(i, j, this.numberTileLimit)) {
-						line.push(new Tile(j, i, "uglyblue", "above/above3"));
-						//line.push(new Tile(j, i, "collision", "collisions"));
+						line.push(new Tile(j, i, "uglyblue", "items"));
+						this.mapMatrice[i][j].shouldDamagePlayer = true;
 					}
 				}
 			}
@@ -117,10 +150,7 @@ export class SetupHandler {
 			finalPlayers.length >=
 			this.numberOfParticipantsNeededToLaunchTheGame - 1
 		) {
-			// WA.room.gameLaunched = true;
-			WA.room.area.get("WaitingRoom").then(() => {
-				console.log("Enough Players");
-			});
+			WA.state.gameLaunched = true;
 		}
 	}
 }
