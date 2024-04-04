@@ -75038,6 +75038,16 @@
          "spacing":0,
          "tilecount":850,
          "tileheight":32,
+         "tiles":[
+                {
+                 "id":677,
+                 "properties":[
+                        {
+                         "name":"Name",
+                         "type":"string",
+                         "value":"uglyblue"
+                        }]
+                }],
          "tilewidth":32
         }, 
         {

@@ -49,7 +49,7 @@ WA.onInit()
         console.log("Player tags: ", WA.player.tags);
         await Player.initPlayerVariables(WA.player);
         await Player.onLifePointEqualsZero(WA.player, () => {
-            WA.player.teleport(60, 92);
+            WA.player.teleport(33, 2400);
         });
 		console.log("Scripting API ready");
 		console.log("Player tags: ", WA.player.tags);
@@ -61,7 +61,7 @@ WA.onInit()
 		initTimerGame(timeCounter, numberTileLimit, tic, mapConfig);
 		await Player.initPlayerVariables(WA.player);
 		await Player.onLifePointEqualsZero(WA.player, () => {
-            WA.player.teleport(60, 92);
+            WA.player.teleport(33, 2400);
         });
 
 		let movementConfig = true;
