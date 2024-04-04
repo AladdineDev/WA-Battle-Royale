@@ -22,7 +22,10 @@ WA.onInit().then(() => {
     // The line below bootstraps the Scripting API Extra library that adds a number of advanced properties/features to WorkAdventure
     bootstrapExtra().then(() => {
         console.log('Scripting API Extra ready');
+
     }).catch(e => console.error(e));
+
+    test();
 
 }).catch(e => console.error(e));
 
@@ -31,6 +34,30 @@ function closePopup(){
         currentPopup.close();
         currentPopup = undefined;
     }
+}
+
+const test = async () => {
+    console.debug('Test function called');
+    // WA.room.setTiles([
+    //     { x: 6, y: 4, tile: "blue", layer: "setTiles" },
+    //     { x: 7, y: 4, tile: 109, layer: "setTiles" },
+    //     { x: 8, y: 4, tile: 109, layer: "setTiles" },
+    //     { x: 9, y: 4, tile: "blue", layer: "setTiles" },
+    //   ]);
+
+    const layerName = 'floor/safeZone';
+
+    WA.room.showLayer(layerName);
+    const onEnter = WA.room.onEnterLayer(layerName);
+    const onLeave = WA.room.onLeaveLayer(layerName);
+    onEnter.subscribe(() => {
+        console.debug('Entered safeZone');
+    });
+    onLeave.subscribe(() => {
+        console.debug('Left safeZone');
+    });
+    
+
 }
 
 export {};
