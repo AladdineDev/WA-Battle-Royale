@@ -1,7 +1,7 @@
 
 import { WorkadventurePlayerCommands } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/player";
-import Inventory from "./Model/inventory";
-import {Item} from "./Model/item";
+import Inventory from "./inventory";
+import {Item} from "./item";
 
 class Player {
   static async initPlayerVariables(
