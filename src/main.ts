@@ -9,7 +9,7 @@ let currentPopup: any = undefined;
 // Waiting for the API to be ready
 WA.onInit().then(() => {
     console.log('Scripting API ready');
-    console.log('Player tags: ',WA.player.tags)
+    console.log('Player tags: ', WA.player.tags)
 
     WA.room.area.onEnter('clock').subscribe(() => {
         const today = new Date();
@@ -25,39 +25,74 @@ WA.onInit().then(() => {
 
     }).catch(e => console.error(e));
 
-    test();
+    safeZoneHandler();
 
 }).catch(e => console.error(e));
 
-function closePopup(){
+function closePopup() {
     if (currentPopup !== undefined) {
         currentPopup.close();
         currentPopup = undefined;
     }
 }
 
-const test = async () => {
+const tileCoordinatesFromMap = (x: number, y: number) => {
+    const TILE_SIZE = 32;
+    return {
+        x: Math.floor(x / TILE_SIZE),
+        y: Math.floor(y / TILE_SIZE)
+    };
+}
+
+const safeZoneHandler = async () => {
     console.debug('Test function called');
-    // WA.room.setTiles([
-    //     { x: 6, y: 4, tile: "blue", layer: "setTiles" },
-    //     { x: 7, y: 4, tile: 109, layer: "setTiles" },
-    //     { x: 8, y: 4, tile: 109, layer: "setTiles" },
-    //     { x: 9, y: 4, tile: "blue", layer: "setTiles" },
-    //   ]);
+    const safeZoneLayerName = 'floor/safeZone';
+    const FIRE_ANIM_TILE_ID = 4;
 
-    const layerName = 'floor/safeZone';
+    const safeZoneArea = WA.room.area.create({
+        width: 1000,
+        height: 1000,
+        name: "safeZoneArea",
+        x: 0,
+        y: 0,
+    });
 
-    WA.room.showLayer(layerName);
-    const onEnter = WA.room.onEnterLayer(layerName);
-    const onLeave = WA.room.onLeaveLayer(layerName);
+    WA.room.area.onEnter(safeZoneArea.name).subscribe(() => {
+        console.debug('Entered safeZoneArea');
+    });
+    WA.room.area.onLeave(safeZoneArea.name).subscribe(() => {
+        console.debug('Left safeZoneArea');
+    });
+    console.debug('safeZoneArea', safeZoneArea);
+
+
+    WA.player.onPlayerMove(({ direction, moving, x, y, oldX, oldY }) => {
+        console.debug('Player moved', { direction, moving, x, y, oldX, oldY });
+        const tileCoordinates = tileCoordinatesFromMap(x, y);
+        WA.room.setTiles([
+            { x: tileCoordinates.x, y: tileCoordinates.y, tile: FIRE_ANIM_TILE_ID, layer: safeZoneLayerName },
+        ]);
+    });
+
+
+
+    WA.room.setTiles([
+        // { x: 3, y: 5, tile: 0, layer: safeZoneLayerName },
+        { x: 4, y: 5, tile: 1, layer: safeZoneLayerName },
+        { x: 1, y: 2, tile: FIRE_ANIM_TILE_ID, layer: safeZoneLayerName },
+        { x: 9, y: 10, tile: FIRE_ANIM_TILE_ID, layer: safeZoneLayerName },
+    ]);
+
+    const onEnter = WA.room.onEnterLayer(safeZoneLayerName);
+    const onLeave = WA.room.onLeaveLayer(safeZoneLayerName);
     onEnter.subscribe(() => {
         console.debug('Entered safeZone');
     });
     onLeave.subscribe(() => {
         console.debug('Left safeZone');
     });
-    
+
 
 }
 
-export {};
+export { };
