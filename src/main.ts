@@ -11,6 +11,7 @@ let map: any = undefined;
 const mapConfig = { height: 0, width: 0 };
 const numberTileLimit = 3;
 let tic = 0;
+const numberOfParticipantsNeededToLaunchTheGame = 2;
 
 // Waiting for the API to be ready
 WA.onInit()
@@ -23,6 +24,38 @@ WA.onInit()
 		mapConfig.width = map.width ?? 0;
 
 		initTimerGame(timeCounter);
+		//Initially, the player is not waiting to play
+		WA.player.state.saveVariable("IsInWaitingRoom", false, {
+			public: true,
+			persist: true,
+			ttl: 24 * 3600,
+			scope: "world",
+		});
+
+		WA.room.area.onEnter("WaitingRoom").subscribe(() => {
+			WA.player.state.saveVariable("IsInWaitingRoom", true, {
+				public: true,
+				persist: true,
+				ttl: 24 * 3600,
+				scope: "world",
+			});
+			checkIfEnoughPlayersToLaunchTheGame();
+			console.log("Player is in waiting room");
+		});
+		WA.room.area.onLeave("WaitingRoom").subscribe(() => {
+			WA.player.state.saveVariable("IsInWaitingRoom", false, {
+				public: true,
+				persist: true,
+				ttl: 24 * 3600,
+				scope: "world",
+			});
+			console.log("Player left waiting room");
+		});
+
+		//test if it works
+		WA.players.onVariableChange("IsInWaitingRoom").subscribe((event) => {
+			console.log(`Player ${event.player.name} new status is ${event.value}`);
+		});
 
 		let movementConfig = true;
 		let playersConfig = true;
@@ -84,7 +117,7 @@ function handleTileRemovedByTime() {
 				j == mapConfig.width - tic
 			) {
 				if (isNotInSafeZone(i, j, numberTileLimit)) {
-					line.push(new Tile(j, i, "uglyBlue", "above/laptops"));
+					line.push(new Tile(j, i, "uglyblue", "above/above3"));
 					//line.push(new Tile(j, i, "collision", "collisions"));
 				}
 			}
@@ -112,6 +145,22 @@ function isNotInSafeZone(
 		width > safeZoneCoordinates.widthMin &&
 		width < safeZoneCoordinates.widthMax
 	);
+}
+
+function checkIfEnoughPlayersToLaunchTheGame() {
+	let players = WA.players.list();
+	let playersArray = Array.from(players);
+	let finalPlayers = playersArray.filter(
+		(player) => player.state.IsInWaitingRoom
+	);
+
+	console.log(finalPlayers);
+	if (finalPlayers.length >= numberOfParticipantsNeededToLaunchTheGame - 1) {
+		WA.room.gameLaunched = true;
+		WA.room.area.get("WaitingRoom").then(() => {
+			console.log("Enough Players");
+		});
+	}
 }
 
 export {};
