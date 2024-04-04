@@ -17,6 +17,27 @@ WA.onInit().then(() => {
         currentPopup = WA.ui.openPopup("clockPopup", "It's " + time, []);
     })
 
+
+    WA.room.area.onEnter('bombe').subscribe(() => {
+        WA.player.setOutlineColor(255, 0, 0);
+        setTimeout(() => {
+            WA.player.removeOutlineColor();
+        }, 500);
+        currentPopup = WA.ui.openPopup("clockPopup", " -1 PV", []);
+    })
+
+    WA.room.area.onLeave('bombe').subscribe(closePopup)
+
+    WA.room.area.onEnter('champignon').subscribe(() => {
+        WA.player.setOutlineColor(0, 255, 0);
+    })
+
+    WA.room.area.onLeave('champignon').subscribe(() => {
+        setTimeout(() => {
+            WA.player.removeOutlineColor();
+        }, 15000);
+    })
+    
     WA.room.area.onLeave('clock').subscribe(closePopup)
 
     // The line below bootstraps the Scripting API Extra library that adds a number of advanced properties/features to WorkAdventure
