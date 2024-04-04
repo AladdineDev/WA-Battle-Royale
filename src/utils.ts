@@ -1,5 +1,4 @@
-import {WorkadventurePlayerCommands} from "@workadventure/iframe-api-typings/front/Api/Iframe/player";
-
+import {WorkadventurePlayerCommands} from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/player";
 
 /**
  * @param : Current player
