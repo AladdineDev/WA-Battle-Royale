@@ -1,9 +1,9 @@
 
 import { WorkadventurePlayerCommands } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/player";
-import Inventory from "./model/inventory";
-import Item from "./model/item";
+import {Item} from "./item";
+import {Inventory} from "./inventory";
 
-class Player {
+export class Player {
   static async initPlayerVariables(
     player: WorkadventurePlayerCommands
   ): Promise<void> {
@@ -30,15 +30,15 @@ class Player {
     player: WorkadventurePlayerCommands,
     callback: () => void
   ): Promise<void> {
-    const subscription = await player.state
-      .onVariableChange("lifePoint")
-      .subscribe((lifePoint) => {
-        if (lifePoint == 0) {
-          callback();
-          console.log("Player is dead. Player Life Point: ", lifePoint);
-          subscription.unsubscribe();
-        }
-      });
+    const subscription = player.state
+        .onVariableChange("lifePoint")
+        .subscribe((lifePoint) => {
+          if (lifePoint == 0) {
+            callback();
+            console.log("Player is dead. Player Life Point: ", lifePoint);
+            subscription.unsubscribe();
+          }
+        });
   }
 
   static async updateLifePoint(
@@ -53,7 +53,7 @@ class Player {
     player: WorkadventurePlayerCommands,
     item: Item
   ): Promise<void> {
-    var inventory = (player.state.inventory as Inventory)
+    let inventory = (player.state.inventory as Inventory)
     WA.player.state.inventory = [...inventory.items, item] 
     console.log(`Update Player Inventory: ${player}`);
   }
@@ -74,5 +74,3 @@ class Player {
   }
 
 }
-
-export default Player;
