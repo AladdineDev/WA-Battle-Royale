@@ -1,5 +1,4 @@
 import { WorkadventurePlayerCommands } from "@workadventure/iframe-api-typings/front/Api/Iframe/player";
-import { callbackify } from "util";
 
 class Player {
   static async initPlayerVariables(
