@@ -75041,6 +75041,67 @@
          "tilecount":1000,
          "tileheight":32,
          "tilewidth":32
+        }, 
+        {
+         "columns":4,
+         "firstgid":44487,
+         "image":"tilesets\/traps\/Bear_Trap.png",
+         "imageheight":32,
+         "imagewidth":128,
+         "margin":0,
+         "name":"Bear_Trap",
+         "spacing":0,
+         "tilecount":4,
+         "tileheight":32,
+         "tiles":[
+                {
+                 "id":0,
+                 "properties":[
+                        {
+                         "name":"Name",
+                         "type":"string",
+                         "value":"Bear_trap"
+                        }]
+                }],
+         "tilewidth":32
+        }, 
+        {
+         "columns":14,
+         "firstgid":44491,
+         "image":"tilesets\/traps\/Fire_Trap.png",
+         "imageheight":41,
+         "imagewidth":448,
+         "margin":0,
+         "name":"Fire_Trap",
+         "properties":[
+                {
+                 "name":"Name",
+                 "type":"string",
+                 "value":"fire_trap"
+                }],
+         "spacing":0,
+         "tilecount":14,
+         "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "columns":1,
+         "firstgid":44505,
+         "image":"tilesets\/traps\/Pit_Trap_Spikes.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "margin":0,
+         "name":"Pit_Trap_Spikes",
+         "properties":[
+                {
+                 "name":"Name",
+                 "type":"string",
+                 "value":"pit_trap"
+                }],
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":32,
+         "tilewidth":32
         }],
  "tilewidth":32,
  "type":"map",

@@ -19,6 +19,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Upload iframe.html
+        uses: actions/upload-artifact@v2
+        with:
+          name: iframe.html
+          path: src/iframe.html
+
       - uses: actions/setup-node@v3
         with:
           node-version: '18.x'
@@ -29,6 +35,12 @@ jobs:
 
       - name: "Build scripts"
         run: npm run build
+
+      - name: Download iframe.html
+        uses: actions/download-artifact@v2
+        with:
+          name: iframe.html
+          path: src/
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
