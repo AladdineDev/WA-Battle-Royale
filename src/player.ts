@@ -22,11 +22,13 @@ class Player {
     });
 
     console.log(`Initialized Player: ${player}`);
+    console.log(`Initialized Player Inventory: ${(player.state.inventory as Inventory).toString()}`);
+
   }
 
   static async onLifePointEqualsZero(
     player: WorkadventurePlayerCommands,
-    callback: Function
+    callback: () => void
   ): Promise<void> {
     const subscription = await player.state
       .onVariableChange("lifePoint")
