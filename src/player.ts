@@ -1,4 +1,5 @@
-import { WorkadventurePlayerCommands } from "@workadventure/iframe-api-typings/front/Api/Iframe/player";
+
+import { WorkadventurePlayerCommands } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/player";
 import Inventory from "./model/inventory";
 import Item from "./model/item";
 
@@ -23,7 +24,6 @@ class Player {
 
     console.log(`Initialized Player: ${player}`);
     console.log(`Initialized Player Inventory: ${(player.state.inventory as Inventory).toString()}`);
-
   }
 
   static async onLifePointEqualsZero(
