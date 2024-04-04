@@ -1,6 +1,7 @@
 import Item from "./item";
 
 class Inventory {
+  selectedItem?: Item
   items: Array<Item> = []
 
   toString() {
