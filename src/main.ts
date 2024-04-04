@@ -2,7 +2,7 @@
 
 import { bootstrapExtra } from "@workadventure/scripting-api-extra";
 import { SetupHandler } from "./Handler/setupHandler";
-import {Player} from "./Model/player";
+import {Player} from "./model/player";
 import { UIWebsite } from "@workadventure/iframe-api-typings";
 import {GenerateItems, initTimerGame} from "./Controller/GameController";
 console.log('Script started successfully');
