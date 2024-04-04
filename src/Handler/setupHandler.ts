@@ -22,6 +22,7 @@ export class SetupHandler {
 		this.mapConfig.width = this.map.width ?? 0;
 		await WA.players.configureTracking();
 
+
 		this.initTimerGame(this.timeCounter);
 		//Initially, the player is not waiting to play
 		WA.player.state.saveVariable("IsInWaitingRoom", false, {
@@ -54,6 +55,13 @@ export class SetupHandler {
 		//test if it works
 		WA.players.onVariableChange("IsInWaitingRoom").subscribe((event) => {
 			console.log(`Player ${event.player.name} new status is ${event.value}`);
+		});
+
+		WA.state.onVariableChange("gameLaunched").subscribe((value) => {
+			console.log("value = " + value);
+			if(WA.player.state.IsInWaitingRoom && value){
+				WA.player.teleport(1284, 549);
+			}
 		});
 	}
 
@@ -105,7 +113,7 @@ export class SetupHandler {
 		);
 	}
 
-	checkIfEnoughPlayersToLaunchTheGame() {
+	async checkIfEnoughPlayersToLaunchTheGame() {
 		let players = WA.players.list();
 		let playersArray = Array.from(players);
 		let finalPlayers = playersArray.filter(
@@ -117,10 +125,8 @@ export class SetupHandler {
 			finalPlayers.length >=
 			this.numberOfParticipantsNeededToLaunchTheGame - 1
 		) {
-			// WA.room.gameLaunched = true;
-			WA.room.area.get("WaitingRoom").then(() => {
-				console.log("Enough Players");
-			});
+			console.log("Game is launched");
+			WA.state.gameLaunched = true;
 		}
 	}
 }
