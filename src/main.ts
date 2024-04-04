@@ -4,7 +4,6 @@ import { bootstrapExtra } from "@workadventure/scripting-api-extra";
 import { SetupHandler } from "./Handler/setupHandler";
 import Player from "./player";
 import { UIWebsite } from "@workadventure/iframe-api-typings";
-import iframeHTML from "../iframe.html"; // Importing the file prevents Vite from removing it during build process
 console.log('Script started successfully');
 
 let currentPopup: any = undefined;
