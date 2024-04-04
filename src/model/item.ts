@@ -1,10 +1,9 @@
-class Item {
-  name!: string;
-  base64Image!: string
+export class Item {
+    id: number;
+    name: string;
 
-  toString() {
-    return `Item{name: ${this.name}, base64Image: ${this.base64Image}}`
-  }
+    constructor(id: number, name: string) {
+        this.id = id;
+        this.name = name;
+    }
 }
-
-export default Item;
