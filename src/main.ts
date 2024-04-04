@@ -2,7 +2,7 @@
 
 import { bootstrapExtra } from "@workadventure/scripting-api-extra";
 import { SetupHandler } from "./Handler/setupHandler";
-import Player from "./Model/player";
+import {Player} from "./Model/player";
 import { UIWebsite } from "@workadventure/iframe-api-typings";
 import {GenerateItems, initTimerGame} from "./Controller/GameController";
 console.log('Script started successfully');
@@ -47,8 +47,8 @@ WA.onInit()
 
         console.log("Scripting API ready");
         console.log("Player tags: ", WA.player.tags);
-        Player.initPlayerVariables(WA.player);
-        Player.onLifePointEqualsZero(WA.player, () => {
+        await Player.initPlayerVariables(WA.player);
+        await Player.onLifePointEqualsZero(WA.player, () => {
             WA.player.teleport(60, 92);
         });
 		console.log("Scripting API ready");
@@ -59,10 +59,10 @@ WA.onInit()
 		mapConfig.width = map.width ?? 0;
         await GenerateItems(map);
 		initTimerGame(timeCounter, numberTileLimit, tic, mapConfig);
-		Player.initPlayerVariables(WA.player);
-		Player.onLifePointEqualsZero(WA.player, () => {
-			WA.player.teleport(60, 92);
-		});
+		await Player.initPlayerVariables(WA.player);
+		await Player.onLifePointEqualsZero(WA.player, () => {
+            WA.player.teleport(60, 92);
+        });
 
 		let movementConfig = true;
 		let playersConfig = true;

@@ -1,9 +1,9 @@
 
 import { WorkadventurePlayerCommands } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/player";
-import Inventory from "./inventory";
 import {Item} from "./item";
+import {Inventory} from "./inventory";
 
-class Player {
+export class Player {
   static async initPlayerVariables(
     player: WorkadventurePlayerCommands
   ): Promise<void> {
@@ -74,5 +74,3 @@ class Player {
   }
 
 }
-
-export default Player;
