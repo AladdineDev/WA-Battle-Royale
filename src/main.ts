@@ -9,7 +9,7 @@ let currentPopup: any = undefined;
 // Waiting for the API to be ready
 WA.onInit().then(() => {
     console.log('Scripting API ready');
-    console.log('Player tags: ',WA.player.tags)
+    console.log('Player tags: ', WA.player.tags)
 
     WA.room.area.onEnter('clock').subscribe(() => {
         const today = new Date();
@@ -24,13 +24,30 @@ WA.onInit().then(() => {
         console.log('Scripting API Extra ready');
     }).catch(e => console.error(e));
 
+    WA.ui.actionBar.addButton({
+        type: "action",
+        label: "Inventaire",
+        toolTip: "Ouvrir l'inventaire",
+        id: "open-inventory",
+        imageSrc: "https://icons.veryicon.com/png/o/healthcate-medical/medical-profession-1/ico-warehouse-management-inventory-1.png",
+        callback: async () => {
+            const website = await WA.ui.website.open({ 
+                position: { horizontal: "left", vertical: "bottom" }, 
+                size: { width: "100%", height: "100%" },
+                allowApi: true,
+                url: "./src/iframe.html",
+                visible: true
+            });
+        }
+    });
+
 }).catch(e => console.error(e));
 
-function closePopup(){
+function closePopup() {
     if (currentPopup !== undefined) {
         currentPopup.close();
         currentPopup = undefined;
     }
 }
 
-export {};
+export { };
