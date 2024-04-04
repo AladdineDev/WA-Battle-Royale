@@ -59,7 +59,7 @@ function GetItemSpawnLocation(map: any) {
     let itemsLocations : Position[] = [];
     for (let i = 0; i < spawnLocationLayer.data.length; i++) {
         if (spawnLocationLayer.data[i] !== 0) {
-            itemsLocations.push(new Position(spawnLocationLayer.data[i]%spawnLocationLayer.width,Math.floor(spawnLocationLayer.data[i]/spawnLocationLayer.width)));
+            itemsLocations.push(new Position(i%spawnLocationLayer.width,Math.floor(i/spawnLocationLayer.width)));
         }
     }
     console.log('itemsLocation', itemsLocations);
@@ -70,7 +70,7 @@ function GetItemSpawnLocation(map: any) {
 function spawnItem(itemsLocation : Position[]) {
     let itemList = []
     for (let i = 0; i < itemsLocation.length; i++) {
-        itemList.push(new Tile(itemsLocation[i].x, itemsLocation[i].y, "TestItem", "above/items"));
+        itemList.push(new Tile(itemsLocation[i].x, itemsLocation[i].y, "TestItem", "items"));
         console.log('itemList', itemList);
     }
     WA.room.setTiles(itemList);
@@ -78,6 +78,7 @@ function spawnItem(itemsLocation : Position[]) {
 
 export async function GenerateItems(map : any) {
     console.log('Generating items');
+    console.log('map', map);
     const itemsLocation = GetItemSpawnLocation(map);
     spawnItem(itemsLocation);
     console.log('items generated');
