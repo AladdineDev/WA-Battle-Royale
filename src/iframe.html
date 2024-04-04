@@ -1,34 +1,83 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <script src="https://play.workadventu.re/iframe_api.js"></script>
-    <style>
-      #modalIframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000000;
-      }
-      #modalIframe div {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="modalIframe">
-      <div>
-        <h1>Inventaire</h1>
-        <p>{contenu de l'inventaire}</p>
-        <button onclick="document.body.removeChild(document.getElementById('modalIframe'))">Close</button>
-      </div>
+
+<head>
+  <script src="https://play.workadventu.re/iframe_api.js"></script>
+  <style>
+    body {
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+    }
+
+    #modalIframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      max-width: 500px;
+      background-color: #212121;
+      border: 5px solid #3f51b5;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      color: #3f51b5;
+      text-transform: uppercase;
+      font-size: 1.3em;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #ff2e2e;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
+
+    .close-button:hover {
+      background-color: #ff4f4f;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="modalIframe">
+    <button class="close-button" onclick="closeInventory()">&times;</button>
+    <div>
+      <h1>Inventaire</h1>
+      <p>{contenu de l'inventaire}</p>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
+
+<script>
+  const closeInventory = async () => {
+    console.debug(window.location.href)
+    const iframeId = new URLSearchParams(window.location.search).get('id');
+    const website = await WA.ui.website.getById(iframeId);
+    website.visible = false
+  }
+</script>

@@ -2,6 +2,7 @@
 
 import { bootstrapExtra } from "@workadventure/scripting-api-extra";
 import Player from "./player";
+import { UIWebsite } from "@workadventure/iframe-api-typings";
 console.log('Script started successfully');
 
 let currentPopup: any = undefined;
@@ -10,6 +11,29 @@ let top: number = 0;
 // Waiting for the API to be ready
 WA.onInit().then(async () => {
     await WA.players.configureTracking();
+
+    let inventoryIframe: UIWebsite;
+    WA.ui.actionBar.addButton({
+        type: "action",
+        label: "Inventaire",
+        toolTip: "Ouvrir l'inventaire",
+        id: "open-inventory",
+        imageSrc: "https://icons.veryicon.com/png/o/healthcate-medical/medical-profession-1/ico-warehouse-management-inventory-1.png",
+        callback: async () => {
+            if (inventoryIframe) {
+                inventoryIframe.visible = !inventoryIframe.visible
+                return;
+            }
+            inventoryIframe = await WA.ui.website.open({ 
+                position: { horizontal: "left", vertical: "bottom" }, 
+                size: { width: "100%", height: "100%" },
+                allowApi: true,
+                url: "./src/iframe.html",
+                visible: true
+            });
+            inventoryIframe.url = `${inventoryIframe.url}?id=${inventoryIframe.id}`;
+        }
+    });
     
     console.log('Scripting API ready');
     console.log('Player tags: ',WA.player.tags)
@@ -80,23 +104,6 @@ WA.onInit().then(async () => {
     bootstrapExtra().then(() => {
         console.log('Scripting API Extra ready');
     }).catch(e => console.error(e));
-
-    WA.ui.actionBar.addButton({
-        type: "action",
-        label: "Inventaire",
-        toolTip: "Ouvrir l'inventaire",
-        id: "open-inventory",
-        imageSrc: "https://icons.veryicon.com/png/o/healthcate-medical/medical-profession-1/ico-warehouse-management-inventory-1.png",
-        callback: async () => {
-            const website = await WA.ui.website.open({ 
-                position: { horizontal: "left", vertical: "bottom" }, 
-                size: { width: "100%", height: "100%" },
-                allowApi: true,
-                url: "./src/iframe.html",
-                visible: true
-            });
-        }
-    });
 
 }).catch(e => console.error(e));
 
