@@ -5,7 +5,7 @@ import { bootstrapExtra } from "@workadventure/scripting-api-extra";
 console.log('Script started successfully');
 
 let currentPopup: any = undefined;
-
+let hp: string = "❤️❤️❤️";
 // Waiting for the API to be ready
 WA.onInit().then(() => {
     console.log('Scripting API ready');
@@ -17,14 +17,38 @@ WA.onInit().then(() => {
         currentPopup = WA.ui.openPopup("clockPopup", "It's " + time, []);
     })
 
+    WA.ui.banner.openBanner({
+        id: "banner-hp",
+        text: "PV : " + hp,
+        bgColor: "#000000",
+        textColor: "#ffffff",
+        closable: false,
+        timeToClose: 0,
+    });
+    
 
     WA.room.area.onEnter('bombe').subscribe(() => {
         WA.player.setOutlineColor(255, 0, 0);
         setTimeout(() => {
             WA.player.removeOutlineColor();
-        }, 500);
-        currentPopup = WA.ui.openPopup("clockPopup", " -1 PV", []);
-    })
+        }, 100);
+        hp = hp.slice(0, -1);
+        WA.ui.banner.closeBanner();
+        if (hp.length <= 0) {
+            WA.ui.openPopup("clockPopup", "Tu es mort", []);
+        } else {
+            currentPopup = WA.ui.openPopup("clockPopup", " -1 PV", []);
+            WA.ui.banner.openBanner({
+                id: "banner-hp",
+                text: "PV : " + hp,
+                bgColor: "#000000",
+                textColor: "#ffffff",
+                closable: false,
+                timeToClose: 0,
+            });
+        }
+    });
+    
 
     WA.room.area.onLeave('bombe').subscribe(closePopup)
 
