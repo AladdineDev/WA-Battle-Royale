@@ -10,3 +10,10 @@ export function decreasePlayerLives( player: WorkadventurePlayerCommands) {
     player.state.saveVariable('vie', val)
     return WA.player.state.vie
 }
+
+export function increasePlayerLives(player: WorkadventurePlayerCommands){
+    let val   = player.state.loadVariable('vie') as number
+    val  = val +1
+    player.state.saveVariable('vie', val)
+    return WA.player.state.vie
+}
