@@ -2,6 +2,7 @@
 
 import { bootstrapExtra } from "@workadventure/scripting-api-extra";
 import { SetupHandler } from "./Handler/setupHandler";
+import Player from "./player";
 
 console.log("Script started successfully");
 
@@ -9,11 +10,12 @@ let currentPopup: any = undefined;
 
 // Waiting for the API to be ready
 WA.onInit()
-	.then(async () => {
+	.then(() => {
 		console.log("Scripting API ready");
 		console.log("Player tags: ", WA.player.tags);
 		const setupHandler = new SetupHandler();
 		setupHandler.init();
+		Player.initPlayerVariables(WA.player);
 
 		WA.room.area.onEnter("clock").subscribe(() => {
 			const today = new Date();
