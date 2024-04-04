@@ -1,5 +1,5 @@
 import { Tile } from "../Entity/Tile";
-import Player from "../player";
+import { Player } from "../model/player";
 
 export class SetupHandler {
 	_instance: SetupHandler | null = null;
