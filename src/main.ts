@@ -32,7 +32,7 @@ WA.onInit()
                     position: { horizontal: "left", vertical: "bottom" },
                     size: { width: "100%", height: "100%" },
                     allowApi: true,
-                    url: "./src/iframe.html",
+                    url: "iframe.html",
                     visible: true
                 });
                 inventoryIframe.url = `${inventoryIframe.url}?id=${inventoryIframe.id}`;
