@@ -7,7 +7,7 @@ import Player from "./player";
 console.log("Script started successfully");
 
 let currentPopup: any = undefined;
-
+let hp: string = "❤️❤️❤️";
 // Waiting for the API to be ready
 WA.onInit()
 	.then(() => {
@@ -16,6 +16,14 @@ WA.onInit()
 		const setupHandler = new SetupHandler();
 		setupHandler.init();
 		Player.initPlayerVariables(WA.player);
+		WA.ui.banner.openBanner({
+			id: "banner-hp",
+			text: "PV : " + hp,
+			bgColor: "#000000",
+			textColor: "#ffffff",
+			closable: false,
+			timeToClose: 0,
+		});
 
 		WA.room.area.onEnter("clock").subscribe(() => {
 			const today = new Date();
@@ -27,8 +35,22 @@ WA.onInit()
 			WA.player.setOutlineColor(255, 0, 0);
 			setTimeout(() => {
 				WA.player.removeOutlineColor();
-			}, 500);
-			currentPopup = WA.ui.openPopup("clockPopup", " -1 PV", []);
+			}, 100);
+			hp = hp.slice(0, -1);
+			WA.ui.banner.closeBanner();
+			if (hp.length <= 0) {
+				WA.ui.openPopup("clockPopup", "Tu es mort", []);
+			} else {
+				currentPopup = WA.ui.openPopup("clockPopup", " -1 PV", []);
+				WA.ui.banner.openBanner({
+					id: "banner-hp",
+					text: "PV : " + hp,
+					bgColor: "#000000",
+					textColor: "#ffffff",
+					closable: false,
+					timeToClose: 0,
+				});
+			}
 		});
 
 		WA.room.area.onLeave("bombe").subscribe(closePopup);
