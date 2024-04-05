@@ -156,32 +156,31 @@ export class SetupHandler {
 		);
 	}
 
-	async launchCountDown(){
-
+	async launchCountDown() {
 		let secondsLeft = 10;
 
-        const interval = setInterval(() => {
+		const interval = setInterval(() => {
 			console.log("started countdown");
-            WA.ui.openPopup("PopUpCountDown", secondsLeft + " seconds", []);
-            secondsLeft--;
-				
-            if (secondsLeft < 0) {
+			WA.ui.openPopup("PopUpCountDown", secondsLeft + " seconds", []);
+			secondsLeft--;
+
+			if (secondsLeft < 0) {
 				WA.state.gameLaunched = true;
-                clearInterval(interval);
-                  
-            }
-        }, 1000);
+				clearInterval(interval);
+			}
+		}, 1000);
 	}
 
-	async askToLaunchGame(){
-		let popUpStart = WA.ui.openPopup("PopUpStart", "Start the game ?",[{
+	async askToLaunchGame() {
+		let popUpStart = WA.ui.openPopup("PopUpStart", "Start the game ?", [
+			{
 				label: "Yes",
 				className: "primary",
 				callback: (popup) => {
 					// launch timer
 					this.launchCountDown();
 					popup.close();
-				}
+				},
 			},
 			{
 				label: "No",
@@ -191,25 +190,10 @@ export class SetupHandler {
 					WA.state.gameLaunched = false;
 					console.log("Player clicked on No");
 					popup.close();
-				}
-			}
-			]);
-			WA.room.area.onLeave("WaitingRoom").subscribe(() => {
-				WA.player.state.saveVariable("IsInWaitingRoom", false, {
-					public: true,
-					persist: true,
-					ttl: 24 * 3600,
-					scope: "world",
-				});
-				WA.state.gameLaunched = false;
-				console.log(WA.state.gameLaunched)
-				popUpStart.close();
-				console.log("Player left waiting room");
-			});
-			//PopUpStart
-			
-		
-
+				},
+			},
+		]);
+		//PopUpStart
 	}
 
 	async checkIfEnoughPlayersToLaunchTheGame() {
@@ -224,9 +208,7 @@ export class SetupHandler {
 			finalPlayers.length >=
 			this.numberOfParticipantsNeededToLaunchTheGame - 1
 		) {
-			
 			this.askToLaunchGame();
-			
 		}
 	}
 }
