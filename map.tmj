@@ -452,6 +452,17 @@
                  "width":0,
                  "x":17.5418079756754,
                  "y":1066.54192492106
+                }, 
+                {
+                 "height":105.762711864407,
+                 "id":6,
+                 "name":"bombe",
+                 "rotation":0,
+                 "type":"area",
+                 "visible":true,
+                 "width":166.779661016949,
+                 "x":1649.12427169944,
+                 "y":517.763927280014
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1294,7 +1305,7 @@
          "y":0
         }],
  "nextlayerid":16,
- "nextobjectid":6,
+ "nextobjectid":10,
  "orientation":"orthogonal",
  "properties":[
         {

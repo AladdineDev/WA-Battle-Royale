@@ -1,4 +1,4 @@
-import { Tile } from "../Entity/Tile";
+import Player from "../player";
 
 export class SetupHandler {
 	_instance: SetupHandler | null = null;
@@ -7,7 +7,8 @@ export class SetupHandler {
 	timeCounter = 300; // 5 minutes
 	numberTileLimit = 3;
 	tic = 0;
-	numberOfParticipantsNeededToLaunchTheGame = 2;
+	numberOfParticipantsNeededToLaunchTheGame = 3;
+	
 
 	constructor() {
 		if (this._instance) {
@@ -22,6 +23,9 @@ export class SetupHandler {
 		this.mapConfig.width = this.map.width ?? 0;
 		await WA.players.configureTracking();
 
+		WA.state.saveVariable('Config', {
+			'Players': [],
+		}).catch(e => console.error('Something went wrong while saving variable', e));
 
 		this.initTimerGame(this.timeCounter);
 		//Initially, the player is not waiting to play
@@ -32,7 +36,29 @@ export class SetupHandler {
 			scope: "world",
 		});
 
+		WA.player.state.saveVariable("gameLaunched", false, {
+			public: true,
+			persist: true,
+			ttl: 24 * 3600,
+			scope: "world",
+		});
+
 		WA.room.area.onEnter("WaitingRoom").subscribe(() => {
+			
+			let config = WA.state.loadVariable('Config');
+			console.log('Config', typeof config);
+
+			((config as any).Players as any[]).push(WA.player);
+
+			WA.player.state.saveVariable("Players", config, {
+				public: true,
+				persist: true,
+				ttl: 24 * 3600,
+				scope: "world",
+			});
+
+			console.log('Config after ', config);
+
 			WA.player.state.saveVariable("IsInWaitingRoom", true, {
 				public: true,
 				persist: true,
@@ -42,6 +68,7 @@ export class SetupHandler {
 			this.checkIfEnoughPlayersToLaunchTheGame();
 			console.log("Player is in waiting room");
 		});
+		
 		WA.room.area.onLeave("WaitingRoom").subscribe(() => {
 			WA.player.state.saveVariable("IsInWaitingRoom", false, {
 				public: true,
@@ -57,12 +84,14 @@ export class SetupHandler {
 			console.log(`Player ${event.player.name} new status is ${event.value}`);
 		});
 
+		
 		WA.state.onVariableChange("gameLaunched").subscribe((value) => {
 			console.log("value = " + value);
-			if(WA.player.state.IsInWaitingRoom && value){
+			if (WA.player.state.IsInWaitingRoom && value) {
 				WA.player.teleport(1284, 549);
 			}
 		});
+		
 	}
 
 	initTimerGame(timeCounter: number) {
@@ -87,13 +116,13 @@ export class SetupHandler {
 					j == this.mapConfig.width - this.tic
 				) {
 					if (this.isNotInSafeZone(i, j, this.numberTileLimit)) {
-						line.push(new Tile(j, i, "uglyblue", "above/above3"));
+						//line.push(new Tile(j, i, "uglyblue", "above/above3"));
 						//line.push(new Tile(j, i, "collision", "collisions"));
 					}
 				}
 			}
-			tileToModify.push(line);
-			WA.room.setTiles(line);
+			//tileToModify.push(line);
+			//WA.room.setTiles(line);
 		}
 		this.tic++;
 	}
@@ -121,6 +150,7 @@ export class SetupHandler {
 		);
 
 		console.log(finalPlayers);
+
 		if (
 			finalPlayers.length >=
 			this.numberOfParticipantsNeededToLaunchTheGame - 1

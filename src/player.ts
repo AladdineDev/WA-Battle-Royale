@@ -15,6 +15,12 @@ class Player {
       scope: "room",
     });
 
+    await player.state.saveVariable("alive", true, {
+      public: true,
+      persist: false,
+      scope: "room",
+    });
+
     // Add LifePoint player variable
     await player.state.saveVariable("inventory", new Inventory(), {
       public: false,
@@ -54,7 +60,7 @@ class Player {
     item: Item
   ): Promise<void> {
     var inventory = (player.state.inventory as Inventory)
-    WA.player.state.inventory = [...inventory.items, item] 
+    WA.player.state.inventory = [...inventory.items, item]
     console.log(`Update Player Inventory: ${player}`);
   }
 
