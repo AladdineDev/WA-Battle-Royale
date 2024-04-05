@@ -5,6 +5,7 @@ import { SetupHandler } from "./Handler/setupHandler";
 import {Player} from "./model/player";
 import { RemotePlayerInterface, UIWebsite } from "@workadventure/iframe-api-typings";
 import {GenerateItems, initTimerGame} from "./Controller/GameController";
+import { RemotePlayerMoved } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/Players/RemotePlayer";
 console.log('Script started successfully');
 
 let currentPopup: any = undefined;
@@ -49,9 +50,15 @@ WA.onInit()
         console.log("Scripting API ready");
         console.log("Player tags: ", WA.player.tags);
         await Player.initPlayerVariables(WA.player);
+
         await Player.onLifePointEqualsZero(WA.player, () => {
             WA.player.teleport(33, 2400);
+            console.log("Tu es mort" + killer);
+			if (killer) {
+				WA.camera.set(killer.position.x, killer.position.y, undefined, undefined, false, true);
+			}
         });
+
 		console.log("Scripting API ready");
 		console.log("Player tags: ", WA.player.tags);
 		map = await WA.room.getTiledMap();
@@ -60,20 +67,11 @@ WA.onInit()
 		mapConfig.width = map.width ?? 0;
         await GenerateItems(map);
 		initTimerGame(timeCounter, numberTileLimit, tic, mapConfig);
-		await Player.initPlayerVariables(WA.player);
-
-		Player.onLifePointEqualsZero(WA.player, () => {
-			WA.player.teleport(60, 54);
-            console.log("Tu es mort" + killer);
-			if (killer) {
-				WA.camera.set(killer.position.x, killer.position.y, undefined, undefined, false, true);
-			}
-		});
 
 		let movementConfig = true;
 		let playersConfig = true;
 
-		await WA.players.configureTracking({
+		/*await WA.players.configureTracking({
 			players: playersConfig,
 			movement: movementConfig,
 		});
@@ -84,7 +82,15 @@ WA.onInit()
 		for (const player of players) {
 			console.log(`Player ${player.name} is near you`);
 		}
-
+*/
+        //suit le joueur qui ma tuer
+		WA.players.onPlayerMoves.subscribe((event: RemotePlayerMoved) => {
+			console.log("Player moved", event.player.name, event.player.position.x, event.player.position.y);
+			if((WA.player.state.lifePoint as number) <= 0){
+				WA.camera.set(event.player.position.x, event.player.position.y, undefined, undefined, false, true);
+			}
+		});
+        
         WA.ui.banner.openBanner({
             id: "banner-hp",
             text:
