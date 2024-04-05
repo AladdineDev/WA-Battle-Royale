@@ -1,6 +1,7 @@
 import { WorkadventurePlayerCommands } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/player";
 import { Item } from "./item";
 import { Inventory } from "./inventory";
+import {itemList} from "../Entity/ItemList";
 
 export class Player {
 	static async initPlayerVariables(
@@ -73,5 +74,24 @@ export class Player {
 		} else {
 			console.log(`Item not found in inventory: ${item.name}`);
 		}
+	}
+
+	static  async  itemInteractionWithKey(player : WorkadventurePlayerCommands ){
+		document.addEventListener('keydown', (event) => {
+			switch (event.key) {
+				case 'b':
+					this.removeItemToInventory(player,new Item(1, itemList.bomb))
+					break;
+				case 't':
+					this.removeItemToInventory(player,new Item(1, itemList.test))
+					break;
+				case 'p':
+					this.removeItemToInventory(player,new Item(1, itemList.potion))
+					break;
+				case 's':
+					this.removeItemToInventory(player,new Item(1, itemList.sword))
+					break;
+			}
+		});
 	}
 }
