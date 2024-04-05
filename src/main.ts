@@ -2,14 +2,20 @@
 
 import { bootstrapExtra } from "@workadventure/scripting-api-extra";
 import { SetupHandler } from "./Handler/setupHandler";
-import Player from "./player";
+import {Player} from "./model/player";
 import { UIWebsite } from "@workadventure/iframe-api-typings";
+import {GenerateItems, initTimerGame} from "./Controller/GameController";
 console.log('Script started successfully');
 
 const GREEN_BAG_TILE_ID = 897;
 const ITEMS_TILE_LAYER_NAME = "Trn_2";
 
 let currentPopup: any = undefined;
+let timeCounter = 300; // 5 minutes
+let map: any = undefined;
+const mapConfig = { height: 0, width: 0 };
+const numberTileLimit = 3;
+let tic = 0;
 let coeur: string = "❤️";
 let top: number = 0;
 // Waiting for the API to be ready
@@ -45,21 +51,42 @@ WA.onInit()
 
         console.log("Scripting API ready");
         console.log("Player tags: ", WA.player.tags);
-        Player.initPlayerVariables(WA.player);
-        Player.onLifePointEqualsZero(WA.player, () => {
-            WA.player.teleport(60, 92);
+        await Player.initPlayerVariables(WA.player);
+        await Player.onLifePointEqualsZero(WA.player, () => {
+            WA.player.teleport(33, 2400);
+        });
+		console.log("Scripting API ready");
+		console.log("Player tags: ", WA.player.tags);
+		map = await WA.room.getTiledMap();
+		console.log(map);
+		mapConfig.height = map.height ?? 0;
+		mapConfig.width = map.width ?? 0;
+        const itemLocation = await GenerateItems(map);
+		initTimerGame(timeCounter, numberTileLimit, tic, mapConfig);
+		await Player.initPlayerVariables(WA.player);
+		await Player.onLifePointEqualsZero(WA.player, () => {
+            WA.player.teleport(33, 2400);
         });
 
-        WA.room.area.onEnter("clock").subscribe(() => {
-            const players = WA.players.list();
-            console.log(players);
-            for (const player of players) {
-                console.log(`Player ${player.name} is near you`);
-            }
-            const today = new Date();
-            const time = today.getHours() + ":" + today.getMinutes();
-            currentPopup = WA.ui.openPopup("clockPopup", "It's " + time, []);
-        });
+		let movementConfig = true;
+		let playersConfig = true;
+		await WA.players.configureTracking({
+			players: playersConfig,
+			movement: movementConfig,
+		});
+		console.log(
+			`Player config tracking ok -> movement: ${movementConfig}, players: ${playersConfig}`
+		);
+		const players = WA.players.list();
+		for (const player of players) {
+			console.log(`Player ${player.name} is near you`);
+		}
+
+		WA.room.area.onEnter("clock").subscribe(() => {
+			const today = new Date();
+			const time = today.getHours() + ":" + today.getMinutes();
+			currentPopup = WA.ui.openPopup("clockPopup", "It's " + time, []);
+		});
 
         WA.ui.banner.openBanner({
             id: "banner-hp",

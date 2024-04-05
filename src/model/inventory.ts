@@ -1,6 +1,6 @@
-import Item from "./item";
+import {Item} from "./item";
 
-class Inventory {
+export class Inventory {
   selectedItem?: Item
   items: Array<Item> = []
 
@@ -9,5 +9,3 @@ class Inventory {
   }
 
 }
-
-export default Inventory;
