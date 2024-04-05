@@ -34,18 +34,43 @@ export class SetupHandler {
 			ttl: 24 * 3600,
 			scope: "world",
 		});
+		
+		WA.player.state.saveVariable("gameLaunched", false, {
+			public: true,
+			persist: true,
+			ttl: 24 * 3600,
+			scope: "world",
+		});
 
 		WA.room.area.onEnter("WaitingRoom").subscribe(() => {
+
+			/*let config = WA.state.loadVariable('Config');
+			console.log('Config', typeof config);
+
+			((config as any).Players as any[]).push(WA.player);
+
+			WA.player.state.saveVariable("Players", config, {
+				public: true,
+				persist: true,
+				ttl: 24 * 3600,
+				scope: "world",
+			});
+
+			console.log('Config after ', config);*/
+
 			WA.player.state.saveVariable("IsInWaitingRoom", true, {
 				public: true,
 				persist: true,
 				ttl: 24 * 3600,
 				scope: "world",
 			});
+
 			this.checkIfEnoughPlayersToLaunchTheGame();
 			console.log("Player is in waiting room");
 		});
+
 		WA.room.area.onLeave("WaitingRoom").subscribe(() => {
+			
 			WA.player.state.saveVariable("IsInWaitingRoom", false, {
 				public: true,
 				persist: true,
@@ -78,13 +103,20 @@ export class SetupHandler {
 		WA.players.onVariableChange("IsInWaitingRoom").subscribe((event) => {
 			console.log(`Player ${event.player.name} new status is ${event.value}`);
 		});
+
+		WA.state.onVariableChange("gameLaunched").subscribe((value) => {
+			console.log("value = " + value);
+			if (WA.player.state.IsInWaitingRoom && value) {
+				WA.player.teleport(1284, 549);
+			}
+		});
 	}
 
 	loadingMap() {
 		for (let i = 0; i < this.mapConfig.height; i++) {
 			const line: Tile[] = [];
 			for (let j = 0; j < this.mapConfig.width; j++) {
-				line.push(new Tile(j, i, "uglyblue", "EndGameTiles"));
+				//line.push(new Tile(j, i, "uglyblue", "EndGameTiles"));
 			}
 			this.mapMatrice.push(line);
 		}
@@ -118,7 +150,7 @@ export class SetupHandler {
 				}
 			}
 			tileToModify.push(line);
-			WA.room.setTiles(line);
+			//WA.room.setTiles(line);
 		}
 		this.tic++;
 	}

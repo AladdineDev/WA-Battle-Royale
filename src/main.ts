@@ -3,7 +3,7 @@
 import { bootstrapExtra } from "@workadventure/scripting-api-extra";
 import { SetupHandler } from "./Handler/setupHandler";
 import {Player} from "./model/player";
-import { UIWebsite } from "@workadventure/iframe-api-typings";
+import { RemotePlayerInterface, UIWebsite } from "@workadventure/iframe-api-typings";
 import {GenerateItems, initTimerGame} from "./Controller/GameController";
 console.log('Script started successfully');
 
@@ -12,6 +12,7 @@ let timeCounter = 300; // 5 minutes
 let map: any = undefined;
 const mapConfig = { height: 0, width: 0 };
 const numberTileLimit = 3;
+let killer : RemotePlayerInterface;
 let tic = 0;
 let coeur: string = "❤️";
 let top: number = 0;
@@ -60,12 +61,18 @@ WA.onInit()
         await GenerateItems(map);
 		initTimerGame(timeCounter, numberTileLimit, tic, mapConfig);
 		await Player.initPlayerVariables(WA.player);
-		await Player.onLifePointEqualsZero(WA.player, () => {
-            WA.player.teleport(33, 2400);
-        });
+
+		Player.onLifePointEqualsZero(WA.player, () => {
+			WA.player.teleport(60, 54);
+            console.log("Tu es mort" + killer);
+			if (killer) {
+				WA.camera.set(killer.position.x, killer.position.y, undefined, undefined, false, true);
+			}
+		});
 
 		let movementConfig = true;
 		let playersConfig = true;
+
 		await WA.players.configureTracking({
 			players: playersConfig,
 			movement: movementConfig,
@@ -77,12 +84,6 @@ WA.onInit()
 		for (const player of players) {
 			console.log(`Player ${player.name} is near you`);
 		}
-
-		WA.room.area.onEnter("clock").subscribe(() => {
-			const today = new Date();
-			const time = today.getHours() + ":" + today.getMinutes();
-			currentPopup = WA.ui.openPopup("clockPopup", "It's " + time, []);
-		});
 
         WA.ui.banner.openBanner({
             id: "banner-hp",
@@ -97,6 +98,12 @@ WA.onInit()
             timeToClose: 0,
         });
 
+        //recupere le joueur qui ma tuer
+		WA.players.onPlayerEnters.subscribe((killerId) => {
+			killer = killerId;
+			console.log("Le tueur est : " + killer?.playerId);
+		});
+
         WA.room.area.onEnter("bombe").subscribe(() => {
             WA.player.setOutlineColor(255, 0, 0);
             setTimeout(() => {
@@ -108,7 +115,7 @@ WA.onInit()
                 (WA.player.state.lifePoint as number) - 1
             );
             if ((WA.player.state.lifePoint as number) <= 0) {
-                WA.ui.openPopup("clockPopup", "Tu es mort", []);
+                //WA.ui.openPopup("clockPopup", "Tu es mort", []);
             } else {
                 WA.ui.banner.openBanner({
                     id: "banner-hp",
@@ -125,7 +132,7 @@ WA.onInit()
             }
         });
 
-        WA.room.area.onEnter("champignon").subscribe(() => {
+        /*WA.room.area.onEnter("champignon").subscribe(() => {
             WA.player.setOutlineColor(0, 255, 0);
         });
 
@@ -134,8 +141,7 @@ WA.onInit()
                 WA.player.removeOutlineColor();
             }, 15000);
         });
-
-        WA.room.area.onLeave("clock").subscribe(closePopup);
+*/
 
         // The line below bootstraps the Scripting API Extra library that adds a number of advanced properties/features to WorkAdventure
         bootstrapExtra()
@@ -146,11 +152,12 @@ WA.onInit()
     })
     .catch((e) => console.error(e));
 
+    /*
 function closePopup() {
     if (currentPopup !== undefined) {
         currentPopup.close();
         currentPopup = undefined;
     }
-}
+}*/
 
 export { };
