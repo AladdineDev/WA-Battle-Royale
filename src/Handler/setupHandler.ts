@@ -1,6 +1,5 @@
-import { Popup } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/Ui/Popup";
 import { Tile } from "../Entity/Tile";
-import { Player } from "../model/player";
+import { updateLifePointUI } from "../main";
 
 export class SetupHandler {
 	_instance: SetupHandler | null = null;
@@ -72,10 +71,7 @@ export class SetupHandler {
 			if (this.mapMatrice[verticalTile][horizontalTile].shouldDamagePlayer) {
 				if (!this.hasAlreadyTakenDamage) {
 					this.hasAlreadyTakenDamage = true;
-					Player.updateLifePoint(
-						WA.player,
-						(WA.player.state.lifePoint as number) - 1
-					);
+					updateLifePointUI();
 					setTimeout(() => {
 						this.hasAlreadyTakenDamage = false;
 					}, 3000);
@@ -172,7 +168,7 @@ export class SetupHandler {
 	}
 
 	async askToLaunchGame() {
-		let popUpStart = WA.ui.openPopup("PopUpStart", "Start the game ?", [
+		WA.ui.openPopup("PopUpStart", "Start the game ?", [
 			{
 				label: "Yes",
 				className: "primary",
