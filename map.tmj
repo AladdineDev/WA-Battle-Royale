@@ -586,24 +586,6 @@
                  "y":1506.2127487625
                 }, 
                 {
-                 "height":0,
-                 "id":5,
-                 "name":"Config",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"gameLaunched",
-                         "type":"bool",
-                         "value":false
-                        }],
-                 "rotation":0,
-                 "type":"variable",
-                 "visible":true,
-                 "width":0,
-                 "x":22.2244671178907,
-                 "y":1348.62107283564
-                }, 
-                {
                  "height":82.8366501666835,
                  "id":7,
                  "name":"bombe",
@@ -625,6 +607,18 @@
                  "width":0,
                  "x":18.6666666666667,
                  "y":1366.66666666667
+                }, 
+                {
+                 "height":0,
+                 "id":9,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":208,
+                 "y":2241.33333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1745,7 +1739,7 @@
          "y":0
         }],
  "nextlayerid":19,
- "nextobjectid":9,
+ "nextobjectid":10,
  "orientation":"orthogonal",
  "properties":[
         {

@@ -26,7 +26,6 @@ export class SetupHandler {
 		this.loadingMap();
 		await WA.players.configureTracking();
 
-		this.initTimerGame(this.timeCounter);
 		//Initially, the player is not waiting to play
 		WA.player.state.saveVariable("IsInWaitingRoom", false, {
 			public: true,
@@ -43,20 +42,6 @@ export class SetupHandler {
 		});
 
 		WA.room.area.onEnter("WaitingRoom").subscribe(() => {
-			/*let config = WA.state.loadVariable('Config');
-			console.log('Config', typeof config);
-
-			((config as any).Players as any[]).push(WA.player);
-
-			WA.player.state.saveVariable("Players", config, {
-				public: true,
-				persist: true,
-				ttl: 24 * 3600,
-				scope: "world",
-			});
-
-			console.log('Config after ', config);*/
-
 			WA.player.state.saveVariable("IsInWaitingRoom", true, {
 				public: true,
 				persist: true,
@@ -106,6 +91,7 @@ export class SetupHandler {
 			console.log("value = " + value);
 			if (WA.player.state.IsInWaitingRoom && value) {
 				WA.player.teleport(1284, 549);
+				this.initTimerGame(this.timeCounter);
 			}
 		});
 	}
