@@ -27,6 +27,10 @@ export class SetupHandler {
 		this.loadingMap();
 		await WA.players.configureTracking();
 		WA.state.saveVariable("displayPopUp", false);
+		WA.state.saveVariable(
+			"top",
+			this.numberOfParticipantsNeededToLaunchTheGame
+		);
 
 		//Initially, the player is not waiting to play
 		WA.player.state.saveVariable("IsInWaitingRoom", false, {

@@ -653,6 +653,30 @@
                  "width":0,
                  "x":164,
                  "y":2232
+                }, 
+                {
+                 "height":0,
+                 "id":18,
+                 "name":"winner",
+                 "point":true,
+                 "rotation":0,
+                 "type":"variable",
+                 "visible":true,
+                 "width":0,
+                 "x":116,
+                 "y":2228
+                }, 
+                {
+                 "height":0,
+                 "id":19,
+                 "name":"top",
+                 "point":true,
+                 "rotation":0,
+                 "type":"variable",
+                 "visible":true,
+                 "width":0,
+                 "x":64,
+                 "y":2216
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1773,7 +1797,7 @@
          "y":0
         }],
  "nextlayerid":19,
- "nextobjectid":18,
+ "nextobjectid":20,
  "orientation":"orthogonal",
  "properties":[
         {
