@@ -155,11 +155,13 @@ export class SetupHandler {
 
 	async launchCountDown() {
 		let secondsLeft = 10;
-
+		let popupCount;
 		const interval = setInterval(() => {
 			console.log("started countdown");
-			WA.ui.openPopup("PopUpCountDown", secondsLeft + " seconds", []);
+			popupCount = WA.ui.openPopup("PopUpCountDown", secondsLeft + " seconds", []);
+			setTimeout(()=> {popupCount.close()},500);
 			secondsLeft--;
+			
 
 			if (secondsLeft < 0) {
 				WA.state.gameLaunched = true;
