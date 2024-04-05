@@ -79,7 +79,7 @@ export class Player {
   static async initFetchItemsOnMove() {
     const TILE_SIZE = 32;
     WA.player.onPlayerMove(async ({ x, y }) => {
-      const items = WA.player.state.loadVariable("generatedItems") as Item[];
+      const items = WA.state.loadVariable("generatedItems") as Item[];
 
       for (const item of items) {
         const userTileCoordinates = { x: Math.floor(x / TILE_SIZE), y: Math.floor(y / TILE_SIZE) };
@@ -88,11 +88,7 @@ export class Player {
           item.tile = undefined;
           await Player.addItemToInventory(WA.player, item);
           const otherItems = items.filter(e => e !== item);
-          WA.player.state.saveVariable("generatedItems", otherItems, {
-            public: true,
-            persist: true,
-            scope: "world",
-          });
+          WA.state.saveVariable("generatedItems", otherItems);
           updateBanner();
           console.debug(`Player ${WA.player.name} found item ${item.value}`);
         }

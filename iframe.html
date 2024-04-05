@@ -81,9 +81,11 @@
     website.visible = false
   }
 
-  WA.player.state.onVariableChange("generatedItems").subscribe((items) => {
+  WA.state.onVariableChange("generatedItems").subscribe((items) => {
     console.debug("iframe::items: ", items);
     const itemList = document.getElementById('itemList');
+    console.debug("iframe::itemList: ", itemList);
     itemList.innerHTML = items.map(item => `<li>${item.value}</li>`).join('');
+    console.debug("iframe::itemList.innerHTML: ", itemList.innerHTML);
   });
 </script>

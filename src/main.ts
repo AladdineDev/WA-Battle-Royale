@@ -38,7 +38,7 @@ WA.onInit()
             toolTip: "Ouvrir l'inventaire",
             id: "open-inventory",
             imageSrc: "https://cdn-icons-png.flaticon.com/512/8256/8256654.png",
-            callback: async () => {
+            callback: () => {
                 inventoryIframe.visible = !inventoryIframe.visible
             }
         });
@@ -57,11 +57,7 @@ WA.onInit()
         mapConfig.width = map.width ?? 0;
 
         const generatedItems = GenerateItems(map);
-        WA.player.state.saveVariable("generatedItems", generatedItems, {
-            public: true,
-            persist: true,
-            scope: "world",
-        });
+        WA.state.saveVariable("generatedItems", generatedItems);
         Player.initFetchItemsOnMove();
 
         initTimerGame(timeCounter, numberTileLimit, tic, mapConfig);
@@ -140,7 +136,7 @@ export const updateBanner = () => {
     WA.ui.banner.closeBanner();
     WA.ui.banner.openBanner({
         id: "banner-hp",
-        text: `PV : ${coeur.repeat(WA.player.state.lifePoint as number)}                TOP : ${top}                Nombre d'items dans la carte : ${(WA.player.state.generatedItems as Array<Item> | undefined)?.length}`,
+        text: `PV : ${coeur.repeat(WA.player.state.lifePoint as number)}                TOP : ${top}                Nombre d'items dans la carte : ${(WA.state.generatedItems as Array<Item> | undefined)?.length}`,
 
         bgColor: "#000000",
         textColor: "#ffffff",
