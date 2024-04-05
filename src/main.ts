@@ -11,6 +11,10 @@ import { GenerateItems, initTimerGame } from "./Controller/GameController";
 import { RemotePlayerMoved } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/Players/RemotePlayer";
 console.log("Script started successfully");
 
+function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // let currentPopup: any = undefined;
 let timeCounter = 300; // 5 minutes
 let map: any = undefined;
@@ -57,7 +61,7 @@ WA.onInit()
 
 		await Player.onLifePointEqualsZero(WA.player, () => {
 			WA.player.teleport(33, 2400);
-			console.log("Tu es mort" + killer);
+			WA.controls.disablePlayerControls();
 			if (killer) {
 				WA.camera.set(
 					killer.position.x,
@@ -92,6 +96,7 @@ WA.onInit()
 			console.log(`Player ${player.name} is near you`);
 		}
 */
+
 		//suit le joueur qui ma tuer
 		WA.players.onPlayerMoves.subscribe((event: RemotePlayerMoved) => {
 			console.log(
@@ -100,7 +105,9 @@ WA.onInit()
 				event.player.position.x,
 				event.player.position.y
 			);
+            
 			if ((WA.player.state.lifePoint as number) <= 0) {
+                
 				WA.camera.set(
 					event.player.position.x,
 					event.player.position.y,
@@ -127,6 +134,20 @@ WA.onInit()
 
 		//recupere le joueur qui ma tuer
 		WA.players.onPlayerEnters.subscribe((killerId) => {
+            WA.player.state.saveVariable("killerX", killerId.position.x, {
+                public: true,
+                persist: true,
+                ttl: 24 * 3600,
+                scope: "world",
+            });
+    
+            WA.player.state.saveVariable("killerY", killerId.position.y, {
+                public: true,
+                persist: true,
+                ttl: 24 * 3600,
+                scope: "world",
+            });
+
 			killer = killerId;
 			console.log("Le tueur est : " + killer?.playerId);
 		});

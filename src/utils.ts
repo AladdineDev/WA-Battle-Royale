@@ -17,3 +17,5 @@ export function increasePlayerLives(player: WorkadventurePlayerCommands){
     player.state.saveVariable('vie', val)
     return WA.player.state.vie
 }
+
+
