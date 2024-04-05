@@ -80,9 +80,8 @@ WA.onInit()
 		initTimerGame(timeCounter, numberTileLimit, tic, mapConfig);
 		await Player.initPlayerVariables(WA.player);
 
-
 		/*await WA.players.configureTracking({
-			players: playersConfig,
+			players: playersConfigPlayer.updateUiPlayerLifePoint();,
 			movement: movementConfig,
 		});
 		console.log(
@@ -133,31 +132,7 @@ WA.onInit()
 		});
 
 		WA.room.area.onEnter("bombe").subscribe(() => {
-			WA.player.setOutlineColor(255, 0, 0);
-			setTimeout(() => {
-				WA.player.removeOutlineColor();
-			}, 100);
-			WA.ui.banner.closeBanner();
-			Player.updateLifePoint(
-				WA.player,
-				(WA.player.state.lifePoint as number) - 1
-			);
-			if ((WA.player.state.lifePoint as number) <= 0) {
-				//WA.ui.openPopup("clockPopup", "Tu es mort", []);
-			} else {
-				WA.ui.banner.openBanner({
-					id: "banner-hp",
-					text:
-						"PV : " +
-						coeur.repeat(WA.player.state.lifePoint as number) +
-						" TOP : " +
-						top,
-					bgColor: "#000000",
-					textColor: "#ffffff",
-					closable: false,
-					timeToClose: 0,
-				});
-			}
+			updateLifePointUI();
 		});
 
 		/*WA.room.area.onEnter("champignon").subscribe(() => {
@@ -187,5 +162,30 @@ function closePopup() {
         currentPopup = undefined;
     }
 }*/
+
+export function updateLifePointUI() {
+	WA.player.setOutlineColor(255, 0, 0);
+	setTimeout(() => {
+		WA.player.removeOutlineColor();
+	}, 300);
+	WA.ui.banner.closeBanner();
+	Player.updateLifePoint(WA.player, (WA.player.state.lifePoint as number) - 1);
+	if ((WA.player.state.lifePoint as number) <= 0) {
+		//WA.ui.openPopup("clockPopup", "Tu es mort", []);
+	} else {
+		WA.ui.banner.openBanner({
+			id: "banner-hp",
+			text:
+				"PV : " +
+				coeur.repeat(WA.player.state.lifePoint as number) +
+				" TOP : " +
+				top,
+			bgColor: "#000000",
+			textColor: "#ffffff",
+			closable: false,
+			timeToClose: 0,
+		});
+	}
+}
 
 export {};
