@@ -41,6 +41,7 @@ export class SetupHandler {
 			scope: "world",
 		});
 
+		
 		WA.room.area.onEnter("WaitingRoom").subscribe(() => {
 			WA.player.state.saveVariable("IsInWaitingRoom", true, {
 				public: true,
