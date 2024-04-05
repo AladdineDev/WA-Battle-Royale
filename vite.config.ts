@@ -27,11 +27,9 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 index: "./index.html",
+                iframe: "./iframe.html",
                 ...getMapsScripts(maps),
             },
-            external: [
-                "iframe.html",
-            ]
         },
     },
     plugins: [...getMapsOptimizers(maps, optimizerOptions)],
