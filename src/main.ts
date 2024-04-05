@@ -11,10 +11,6 @@ import { GenerateItems, initTimerGame } from "./Controller/GameController";
 import { RemotePlayerMoved } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/Players/RemotePlayer";
 console.log("Script started successfully");
 
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 // let currentPopup: any = undefined;
 let timeCounter = 300; // 5 minutes
 let map: any = undefined;
