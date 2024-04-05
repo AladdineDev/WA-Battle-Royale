@@ -19,7 +19,6 @@ const numberTileLimit = 3;
 let killer: RemotePlayerInterface;
 let tic = 0;
 let coeur: string = "❤️";
-let top: number = 0;
 // Waiting for the API to be ready
 WA.onInit()
 	.then(async () => {
@@ -56,6 +55,7 @@ WA.onInit()
 		await Player.initPlayerVariables(WA.player);
 
 		await Player.onLifePointEqualsZero(WA.player, () => {
+			WA.state.saveVariable("top", (WA.state.top as number) - 1);
 			WA.player.teleport(33, 2400);
 			WA.controls.disablePlayerControls();
 			if (killer) {
@@ -120,7 +120,7 @@ WA.onInit()
 				"PV : " +
 				coeur.repeat(WA.player.state.lifePoint as number) +
 				" TOP : " +
-				top,
+				WA.state.top,
 			bgColor: "#000000",
 			textColor: "#ffffff",
 			closable: false,
@@ -155,6 +155,42 @@ WA.onInit()
 			if (value && WA.player.state.IsInWaitingRoom) {
 				setupHandler.launchCountDown();
 			}
+		});
+
+		WA.state.onVariableChange("top").subscribe((value) => {
+			WA.ui.banner.closeBanner();
+			console.log("TOP");
+			if ((value as number) == 1) {
+				console.log(WA.player.name);
+				WA.state.saveVariable("winner", WA.player.name);
+			} else if ((WA.player.state.lifePoint as number) > 0) {
+				WA.ui.banner.openBanner({
+					id: "banner-hp",
+					text:
+						"PV : " +
+						coeur.repeat(WA.player.state.lifePoint as number) +
+						" TOP : " +
+						value,
+					bgColor: "#000000",
+					textColor: "#ffffff",
+					closable: false,
+					timeToClose: 0,
+				});
+			}
+		});
+
+		WA.state.onVariableChange("winner").subscribe((value) => {
+			console.log(value);
+			WA.ui.banner.openBanner({
+				id: "banner-hp",
+				text: "WELL PLAYED Player: " + value + " YOU WIN !!!",
+				bgColor: "#000000",
+				textColor: "#ffffff",
+				closable: false,
+				timeToClose: 0,
+			});
+			WA.player.teleport(226, 1924);
+			WA.controls.restorePlayerControls();
 		});
 
 		/*WA.room.area.onEnter("champignon").subscribe(() => {
@@ -201,7 +237,7 @@ export function updateLifePointUI() {
 				"PV : " +
 				coeur.repeat(WA.player.state.lifePoint as number) +
 				" TOP : " +
-				top,
+				WA.state.top,
 			bgColor: "#000000",
 			textColor: "#ffffff",
 			closable: false,
