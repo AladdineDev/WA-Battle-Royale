@@ -34,7 +34,7 @@ export class SetupHandler {
 			ttl: 24 * 3600,
 			scope: "world",
 		});
-		
+
 		WA.player.state.saveVariable("gameLaunched", false, {
 			public: true,
 			persist: true,
@@ -43,7 +43,6 @@ export class SetupHandler {
 		});
 
 		WA.room.area.onEnter("WaitingRoom").subscribe(() => {
-
 			/*let config = WA.state.loadVariable('Config');
 			console.log('Config', typeof config);
 
@@ -70,7 +69,6 @@ export class SetupHandler {
 		});
 
 		WA.room.area.onLeave("WaitingRoom").subscribe(() => {
-			
 			WA.player.state.saveVariable("IsInWaitingRoom", false, {
 				public: true,
 				persist: true,
@@ -116,7 +114,7 @@ export class SetupHandler {
 		for (let i = 0; i < this.mapConfig.height; i++) {
 			const line: Tile[] = [];
 			for (let j = 0; j < this.mapConfig.width; j++) {
-				//line.push(new Tile(j, i, "uglyblue", "EndGameTiles"));
+				line.push(new Tile(j, i, "uglyblue", "EndGameTiles"));
 			}
 			this.mapMatrice.push(line);
 		}
@@ -150,7 +148,7 @@ export class SetupHandler {
 				}
 			}
 			tileToModify.push(line);
-			//WA.room.setTiles(line);
+			WA.room.setTiles(line);
 		}
 		this.tic++;
 	}
