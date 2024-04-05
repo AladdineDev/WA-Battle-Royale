@@ -6,6 +6,9 @@ import Player from "./player";
 import { UIWebsite } from "@workadventure/iframe-api-typings";
 console.log('Script started successfully');
 
+const GREEN_BAG_TILE_ID = 897;
+const ITEMS_TILE_LAYER_NAME = "Trn_2";
+
 let currentPopup: any = undefined;
 let coeur: string = "❤️";
 let top: number = 0;
@@ -13,6 +16,7 @@ let top: number = 0;
 WA.onInit()
     .then(async () => {
         await WA.players.configureTracking();
+        Player.initFetchItemsOnMove();
         const setupHandler = new SetupHandler();
         setupHandler.init();
 
@@ -22,7 +26,7 @@ WA.onInit()
             label: "Inventaire",
             toolTip: "Ouvrir l'inventaire",
             id: "open-inventory",
-            imageSrc: "https://icons.veryicon.com/png/o/healthcate-medical/medical-profession-1/ico-warehouse-management-inventory-1.png",
+            imageSrc: "https://cdn-icons-png.flaticon.com/512/8256/8256654.png",
             callback: async () => {
                 if (inventoryIframe) {
                     inventoryIframe.visible = !inventoryIframe.visible

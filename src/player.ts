@@ -73,6 +73,13 @@ class Player {
     }
   }
 
+  static async initFetchItemsOnMove() {
+    WA.player.onPlayerMove(async ({ direction, moving, x, y }) => {
+      console.debug(`Player moved: ${direction}, ${moving}, ${x}, ${y}`);
+      // check if position matches an item withing the list
+    });
+  }
+
 }
 
 export default Player;
