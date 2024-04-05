@@ -57,7 +57,7 @@ WA.onInit()
 		console.log(map);
 		mapConfig.height = map.height ?? 0;
 		mapConfig.width = map.width ?? 0;
-        await GenerateItems(map);
+        const itemLocation = await GenerateItems(map);
 		initTimerGame(timeCounter, numberTileLimit, tic, mapConfig);
 		await Player.initPlayerVariables(WA.player);
 		await Player.onLifePointEqualsZero(WA.player, () => {
