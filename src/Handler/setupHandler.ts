@@ -84,7 +84,7 @@ export class SetupHandler {
 		for (let i = 0; i < this.mapConfig.height; i++) {
 			const line: Tile[] = [];
 			for (let j = 0; j < this.mapConfig.width; j++) {
-				line.push(new Tile(j, i, "uglyblue", "items"));
+				line.push(new Tile(j, i, "uglyblue", "EndGameTiles"));
 			}
 			this.mapMatrice.push(line);
 		}
@@ -112,7 +112,7 @@ export class SetupHandler {
 					j == this.mapConfig.width - this.tic
 				) {
 					if (this.isNotInSafeZone(i, j, this.numberTileLimit)) {
-						line.push(new Tile(j, i, "uglyblue", "items"));
+						line.push(new Tile(j, i, "uglyblue", "EndGameTiles"));
 						this.mapMatrice[i][j].shouldDamagePlayer = true;
 					}
 				}
@@ -131,10 +131,11 @@ export class SetupHandler {
 			widthMax: this.mapConfig.width / 2 + numberTileLimit,
 		};
 		return !(
-			height > safeZoneCoordinates.heightMin &&
-			height < safeZoneCoordinates.heightMax &&
-			width > safeZoneCoordinates.widthMin &&
-			width < safeZoneCoordinates.widthMax
+			width < 12 ||
+			(height > safeZoneCoordinates.heightMin &&
+				height < safeZoneCoordinates.heightMax &&
+				width > safeZoneCoordinates.widthMin &&
+				width < safeZoneCoordinates.widthMax)
 		);
 	}
 
