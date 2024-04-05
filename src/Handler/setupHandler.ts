@@ -1,3 +1,4 @@
+import { Popup } from "@workadventure/iframe-api-typings";
 import { Tile } from "../Entity/Tile";
 import { updateLifePointUI } from "../main";
 
@@ -155,7 +156,7 @@ export class SetupHandler {
 
 	async launchCountDown() {
 		let secondsLeft = 10;
-		let popupCount;
+		let popupCount:Popup;
 		const interval = setInterval(() => {
 			console.log("started countdown");
 			popupCount = WA.ui.openPopup("PopUpCountDown", secondsLeft + " seconds", []);
