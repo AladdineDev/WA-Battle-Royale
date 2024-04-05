@@ -34,12 +34,12 @@ export function handleTileRemovedByTime(
 			) {
 				if (isNotInSafeZone(i, j, numberTileLimit, mapConfig)) {
 					line.push(new Tile(j, i, "uglyblue", "EndGameTiles"));
-					//line.push(new Tile(j, i, "collision", "collisions"));
+					line.push(new Tile(j, i, "collision", "collisions"));
 				}
 			}
 		}
 		tileToModify.push(line);
-		WA.room.setTiles(line);
+		//WA.room.setTiles(line);
 	}
 	tic++;
 }
