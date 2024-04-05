@@ -66,7 +66,7 @@
     <button class="close-button" onclick="closeInventory()">&times;</button>
     <div>
       <h1>Inventaire</h1>
-      <p>{contenu de l'inventaire}</p>
+      <ul id="itemList"></ul>
     </div>
   </div>
 </body>
@@ -80,4 +80,10 @@
     const website = await WA.ui.website.getById(iframeId);
     website.visible = false
   }
+
+  WA.player.state.onVariableChange("generatedItems").subscribe((items) => {
+    console.debug("iframe::items: ", items);
+    const itemList = document.getElementById('itemList');
+    itemList.innerHTML = items.map(item => `<li>${item.value}</li>`).join('');
+  });
 </script>

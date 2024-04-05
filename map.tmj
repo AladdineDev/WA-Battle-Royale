@@ -135,6 +135,12 @@
          "id":16,
          "name":"itemSpawnLocation",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"openWebsiteAllowApi",
+                 "type":"bool",
+                 "value":true
+                }],
          "type":"tilelayer",
          "visible":true,
          "width":140,

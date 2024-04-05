@@ -1,7 +1,10 @@
 
 import { WorkadventurePlayerCommands } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/player";
-import {Item} from "./item";
-import {Inventory} from "./inventory";
+import { Item } from "./item";
+import { Inventory } from "./inventory";
+import { Position } from "../Entity/Position";
+import { Tile } from "../Entity/Tile";
+import { updateBanner } from "../main";
 
 export class Player {
   static async initPlayerVariables(
@@ -31,14 +34,14 @@ export class Player {
     callback: () => void
   ): Promise<void> {
     const subscription = player.state
-        .onVariableChange("lifePoint")
-        .subscribe((lifePoint) => {
-          if (lifePoint == 0) {
-            callback();
-            console.log("Player is dead. Player Life Point: ", lifePoint);
-            subscription.unsubscribe();
-          }
-        });
+      .onVariableChange("lifePoint")
+      .subscribe((lifePoint) => {
+        if (lifePoint == 0) {
+          callback();
+          console.log("Player is dead. Player Life Point: ", lifePoint);
+          subscription.unsubscribe();
+        }
+      });
   }
 
   static async updateLifePoint(
@@ -54,7 +57,7 @@ export class Player {
     item: Item
   ): Promise<void> {
     let inventory = (player.state.inventory as Inventory)
-    WA.player.state.inventory = [...inventory.items, item] 
+    WA.player.state.inventory = [...inventory.items, item]
     console.log(`Update Player Inventory: ${player}`);
   }
 
@@ -64,19 +67,36 @@ export class Player {
   ): Promise<void> {
     const inventory = player.state.inventory as Inventory;
     const items = inventory.items;
-    const index = items.findIndex(i => i.name === item.name);
+    const index = items.findIndex(i => i.value === item.value);
     if (index !== -1) {
       inventory.items.splice(index, 1);
-      console.log(`Item removed from inventory: ${item.name}`);
+      console.log(`Item removed from inventory: ${item.value}`);
     } else {
-      console.log(`Item not found in inventory: ${item.name}`);
+      console.log(`Item not found in inventory: ${item.value}`);
     }
   }
 
   static async initFetchItemsOnMove() {
-    WA.player.onPlayerMove(async ({ direction, moving, x, y }) => {
-      console.debug(`Player moved: ${direction}, ${moving}, ${x}, ${y}`);
-      // check if position matches an item withing the list
+    const TILE_SIZE = 32;
+    WA.player.onPlayerMove(async ({ x, y }) => {
+      const items = WA.player.state.loadVariable("generatedItems") as Item[];
+
+      for (const item of items) {
+        const userTileCoordinates = { x: Math.floor(x / TILE_SIZE), y: Math.floor(y / TILE_SIZE) };
+        if (item.tile?.x === userTileCoordinates.x && item.tile?.y === userTileCoordinates.y) {
+          WA.room.setTiles([{ layer: "items", tile: null, x: item.tile.x, y: item.tile.y }]);
+          item.tile = undefined;
+          await Player.addItemToInventory(WA.player, item);
+          const otherItems = items.filter(e => e !== item);
+          WA.player.state.saveVariable("generatedItems", otherItems, {
+            public: true,
+            persist: true,
+            scope: "world",
+          });
+          updateBanner();
+          console.debug(`Player ${WA.player.name} found item ${item.value}`);
+        }
+      }
     });
   }
 

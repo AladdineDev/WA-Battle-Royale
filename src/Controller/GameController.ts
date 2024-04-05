@@ -1,6 +1,7 @@
 import { Tile } from "../Entity/Tile";
 import { Position } from "../Entity/Position";
-import {itemList} from "../Entity/ItemList";
+import {ItemList} from "../Entity/ItemList";
+import { Item } from "../model/item";
 
 export function initTimerGame(
 	timeCounter: number,
@@ -83,13 +84,13 @@ function GetItemSpawnLocation(map: any) {
 	return itemsLocations;
 }
 
-function SelectRandomItem() : itemList {
-	const itemsArray = Object.values(itemList);
+function SelectRandomItem() : ItemList {
+	const itemsArray = Object.values(ItemList);
 	const randomIndex = Math.floor(Math.random() * itemsArray.length);
 	return itemsArray[randomIndex];
 }
 
-function spawnItem(itemsLocation: Position[]) {
+function spawnItem(itemsLocation: Position[]): Item[] {
 	let itemList: Tile[] = [];
 	for (let i = 0; i < itemsLocation.length; i++) {
 		let itemType = SelectRandomItem();
@@ -99,13 +100,14 @@ function spawnItem(itemsLocation: Position[]) {
 		console.log("itemList", itemList);
 	}
 	WA.room.setTiles(itemList);
+	return itemList.map((item) => {
+		return new Item(item.tile as ItemList, new Tile(item.x, item.y, item.tile as ItemList, "items"));
+	});
 }
 
-export async function GenerateItems(map: any) {
+export function GenerateItems(map: any): Item[] {
 	console.log("Generating items");
 	console.log("map", map);
 	const itemsLocation = GetItemSpawnLocation(map);
-	spawnItem(itemsLocation);
-	console.log("items generated");
-	return itemsLocation;
+	return spawnItem(itemsLocation);
 }

@@ -1,9 +1,12 @@
-export class Item {
-    id: number;
-    name: string;
+import { ItemList } from "../Entity/ItemList";
+import { Tile } from "../Entity/Tile";
 
-    constructor(id: number, name: string) {
-        this.id = id;
-        this.name = name;
+export class Item {
+    value: ItemList
+    tile?: Tile
+
+    constructor(value: ItemList, tile?: Tile) {
+        this.value = value;
+        this.tile = tile;
     }
 }
