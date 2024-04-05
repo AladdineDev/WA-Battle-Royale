@@ -26,6 +26,7 @@ export class SetupHandler {
 		this.mapConfig.width = this.map.width ?? 0;
 		this.loadingMap();
 		await WA.players.configureTracking();
+		WA.state.saveVariable("displayPopUp", false);
 
 		//Initially, the player is not waiting to play
 		WA.player.state.saveVariable("IsInWaitingRoom", false, {
@@ -35,14 +36,8 @@ export class SetupHandler {
 			scope: "world",
 		});
 
-		WA.player.state.saveVariable("gameLaunched", false, {
-			public: true,
-			persist: true,
-			ttl: 24 * 3600,
-			scope: "world",
-		});
+		WA.state.saveVariable("gameLaunched", false);
 
-		
 		WA.room.area.onEnter("WaitingRoom").subscribe(() => {
 			WA.player.state.saveVariable("IsInWaitingRoom", true, {
 				public: true,
@@ -156,13 +151,18 @@ export class SetupHandler {
 
 	async launchCountDown() {
 		let secondsLeft = 10;
-		let popupCount:Popup;
+		let popupCount: Popup;
 		const interval = setInterval(() => {
 			console.log("started countdown");
-			popupCount = WA.ui.openPopup("PopUpCountDown", secondsLeft + " seconds", []);
-			setTimeout(()=> {popupCount.close()},500);
+			popupCount = WA.ui.openPopup(
+				"PopUpCountDown",
+				secondsLeft + " seconds",
+				[]
+			);
+			setTimeout(() => {
+				popupCount.close();
+			}, 500);
 			secondsLeft--;
-			
 
 			if (secondsLeft < 0) {
 				WA.state.gameLaunched = true;
@@ -178,7 +178,7 @@ export class SetupHandler {
 				className: "primary",
 				callback: (popup) => {
 					// launch timer
-					this.launchCountDown();
+					WA.state.saveVariable("displayPopUp", true);
 					popup.close();
 				},
 			},

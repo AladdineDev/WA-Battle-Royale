@@ -611,10 +611,10 @@
                 {
                  "height":0,
                  "id":9,
-                 "name":"",
+                 "name":"timer",
                  "point":true,
                  "rotation":0,
-                 "type":"",
+                 "type":"variable",
                  "visible":true,
                  "width":0,
                  "x":208,
@@ -641,6 +641,18 @@
                  "width":125.333333333333,
                  "x":118.666666666667,
                  "y":1429.33333333333
+                }, 
+                {
+                 "height":0,
+                 "id":17,
+                 "name":"displayPopUp",
+                 "point":true,
+                 "rotation":0,
+                 "type":"variable",
+                 "visible":true,
+                 "width":0,
+                 "x":164,
+                 "y":2232
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1761,7 +1773,7 @@
          "y":0
         }],
  "nextlayerid":19,
- "nextobjectid":17,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "properties":[
         {

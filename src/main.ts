@@ -101,9 +101,8 @@ WA.onInit()
 				event.player.position.x,
 				event.player.position.y
 			);
-            
+
 			if ((WA.player.state.lifePoint as number) <= 0) {
-                
 				WA.camera.set(
 					event.player.position.x,
 					event.player.position.y,
@@ -130,19 +129,19 @@ WA.onInit()
 
 		//recupere le joueur qui ma tuer
 		WA.players.onPlayerEnters.subscribe((killerId) => {
-            WA.player.state.saveVariable("killerX", killerId.position.x, {
-                public: true,
-                persist: true,
-                ttl: 24 * 3600,
-                scope: "world",
-            });
-    
-            WA.player.state.saveVariable("killerY", killerId.position.y, {
-                public: true,
-                persist: true,
-                ttl: 24 * 3600,
-                scope: "world",
-            });
+			WA.player.state.saveVariable("killerX", killerId.position.x, {
+				public: true,
+				persist: true,
+				ttl: 24 * 3600,
+				scope: "world",
+			});
+
+			WA.player.state.saveVariable("killerY", killerId.position.y, {
+				public: true,
+				persist: true,
+				ttl: 24 * 3600,
+				scope: "world",
+			});
 
 			killer = killerId;
 			console.log("Le tueur est : " + killer?.playerId);
@@ -150,6 +149,12 @@ WA.onInit()
 
 		WA.room.area.onEnter("bombe").subscribe(() => {
 			updateLifePointUI();
+		});
+
+		WA.state.onVariableChange("displayPopUp").subscribe((value) => {
+			if (value && WA.player.state.IsInWaitingRoom) {
+				setupHandler.launchCountDown();
+			}
 		});
 
 		/*WA.room.area.onEnter("champignon").subscribe(() => {
