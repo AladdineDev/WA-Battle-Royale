@@ -1,3 +1,4 @@
+import { Popup } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/Ui/Popup";
 import { Tile } from "../Entity/Tile";
 import { Player } from "../model/player";
 
@@ -155,7 +156,47 @@ export class SetupHandler {
 		);
 	}
 
-	checkIfEnoughPlayersToLaunchTheGame() {
+	async launchCountDown() {
+		let secondsLeft = 10;
+
+		const interval = setInterval(() => {
+			console.log("started countdown");
+			WA.ui.openPopup("PopUpCountDown", secondsLeft + " seconds", []);
+			secondsLeft--;
+
+			if (secondsLeft < 0) {
+				WA.state.gameLaunched = true;
+				clearInterval(interval);
+			}
+		}, 1000);
+	}
+
+	async askToLaunchGame() {
+		let popUpStart = WA.ui.openPopup("PopUpStart", "Start the game ?", [
+			{
+				label: "Yes",
+				className: "primary",
+				callback: (popup) => {
+					// launch timer
+					this.launchCountDown();
+					popup.close();
+				},
+			},
+			{
+				label: "No",
+				className: "primary",
+				callback: (popup) => {
+					// Close the popup when the "Close" button is pressed.
+					WA.state.gameLaunched = false;
+					console.log("Player clicked on No");
+					popup.close();
+				},
+			},
+		]);
+		//PopUpStart
+	}
+
+	async checkIfEnoughPlayersToLaunchTheGame() {
 		let players = WA.players.list();
 		let playersArray = Array.from(players);
 		let finalPlayers = playersArray.filter(
@@ -167,7 +208,7 @@ export class SetupHandler {
 			finalPlayers.length >=
 			this.numberOfParticipantsNeededToLaunchTheGame - 1
 		) {
-			WA.state.gameLaunched = true;
+			this.askToLaunchGame();
 		}
 	}
 }
