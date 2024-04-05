@@ -10,7 +10,7 @@ export class SetupHandler {
 	timeCounter = 300; // 5 minutes
 	numberTileLimit = 3;
 	tic = 0;
-	numberOfParticipantsNeededToLaunchTheGame = 2;
+	numberOfParticipantsNeededToLaunchTheGame = 3;
 	hasAlreadyTakenDamage = false;
 
 	constructor() {
