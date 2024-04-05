@@ -80,20 +80,6 @@ WA.onInit()
 		initTimerGame(timeCounter, numberTileLimit, tic, mapConfig);
 		await Player.initPlayerVariables(WA.player);
 
-		Player.onLifePointEqualsZero(WA.player, () => {
-			WA.player.teleport(60, 54);
-			console.log("Tu es mort" + killer);
-			if (killer) {
-				WA.camera.set(
-					killer.position.x,
-					killer.position.y,
-					undefined,
-					undefined,
-					false,
-					true
-				);
-			}
-		});
 
 		/*await WA.players.configureTracking({
 			players: playersConfig,
