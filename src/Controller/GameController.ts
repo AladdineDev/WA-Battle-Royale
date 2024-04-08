@@ -1,5 +1,6 @@
 import { Tile } from "../Entity/Tile";
 import { Position } from "../Entity/Position";
+import {itemList} from "../Entity/ItemList";
 
 export function initTimerGame(
 	timeCounter: number,
@@ -82,11 +83,18 @@ function GetItemSpawnLocation(map: any) {
 	return itemsLocations;
 }
 
+function SelectRandomItem() : itemList {
+	const itemsArray = Object.values(itemList);
+	const randomIndex = Math.floor(Math.random() * itemsArray.length);
+	return itemsArray[randomIndex];
+}
+
 function spawnItem(itemsLocation: Position[]) {
-	let itemList = [];
+	let itemList: Tile[] = [];
 	for (let i = 0; i < itemsLocation.length; i++) {
+		let itemType = SelectRandomItem();
 		itemList.push(
-			new Tile(itemsLocation[i].x, itemsLocation[i].y, "TestItem", "items")
+			new Tile(itemsLocation[i].x, itemsLocation[i].y, itemType, "items")
 		);
 		console.log("itemList", itemList);
 	}
@@ -99,4 +107,5 @@ export async function GenerateItems(map: any) {
 	const itemsLocation = GetItemSpawnLocation(map);
 	spawnItem(itemsLocation);
 	console.log("items generated");
+	return itemsLocation;
 }
